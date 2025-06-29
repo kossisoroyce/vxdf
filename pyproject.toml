@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vxdf"
+version = "0.1.2"
+description = "Python implementation of the VXDF (Vector Exchange Data Format) for storing text, metadata and vector embeddings in a single portable file."
+readme = "README.md"
+authors = [
+    { name = "Kossiso Royce", email = "kossisoroyce@gmail.com" }
+]
+requires-python = ">=3.8"
+# runtime deps (stdlib ones excluded)
+dependencies = [
+    "msgpack==1.0.8",
+    "numpy==1.26.4",
+    "zstandard>=0.22,<0.24",
+    # rich CLI output
+    "rich>=13",
+    # shell completion
+    "argcomplete>=3",
+    # ingestion back-ends
+    "pdfplumber>=0.10",
+    "pandas>=2",
+    "python-docx>=1",
+    "pyarrow>=15",
+    "sentence-transformers>=2.7",
+    # OpenAI embeddings
+    "openai>=1",
+]
+license = {text = "BSD-3-Clause"}
+keywords = ["vxdf", "vector", "embeddings", "file-format", "rag"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Typing :: Typed",
+]
+
+# no optional dependencies - all included by default
+
+
+
+[project.urls]
+Homepage = "https://github.com/kossisoroyce/vxdf"
+Documentation = "https://kossisoroyce.github.io/vxdf"
+
+[project.scripts]
+vxdf = "vxdf.cli:main"
+
+[tool.setuptools.package-data]
+# include py.typed for PEP561
+"vxdf" = ["py.typed"]
+
+# ------------------------------
+# Tool configurations
+# ------------------------------
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "B", "UP", "C", "NPY", "ANN"]
+
+[tool.mypy]
+plugins = []
+python_version = "3.9"
+strict = true
+ignore_missing_imports = false
+
+# Exclude non-package directories added by users
+[tool.setuptools.packages.find]
+include = ["vxdf*"]
+exclude = ["folder*"]
+
