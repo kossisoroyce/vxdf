@@ -1,0 +1,7 @@
+# Requirements for the Streamlit compliance demo
+streamlit>=1.34
+pdfplumber>=0.10
+sentence-transformers>=2.7
+openai>=1
+python-dotenv>=1
+vxdf>=0.1.2
