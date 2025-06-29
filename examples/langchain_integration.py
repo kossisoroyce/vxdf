@@ -6,8 +6,8 @@ This script demonstrates loading a VXDF file as a vector store in LangChain.
 """
 from __future__ import annotations
 
-from langchain_community.vectorstores import VXDF  # type: ignore
 from langchain_community.embeddings import SentenceTransformerEmbeddings
+from langchain_community.vectorstores import VXDF  # type: ignore
 
 # Path to an existing VXDF file
 VXDF_PATH = "demo.vxdf"

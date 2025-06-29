@@ -1,15 +1,14 @@
 """Compression-related and header-marker edge-case tests for VXDF."""
 from __future__ import annotations
 
-import os
 import struct
 from pathlib import Path
 
 import pytest
 
-from vxdf.writer import VXDFWriter
-from vxdf.reader import VXDFReader
 from vxdf import errors as vxerr
+from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 HEADER_MARKER = b"\n---HEADER_END---\n"
 

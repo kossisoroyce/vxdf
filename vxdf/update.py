@@ -14,19 +14,18 @@ replace existing chunks or ``--dedupe error`` to abort on duplicates.
 """
 from __future__ import annotations
 
-from pathlib import Path
-from typing import List, Optional
+import itertools
 import os
 import sys
-import json
-import itertools
 import threading
 import time
 from contextlib import nullcontext
+from pathlib import Path
+from typing import List, Optional
 
+from . import ingest as _ingest  # reuse loaders and embedding helpers
 from .reader import VXDFReader
 from .writer import VXDFWriter
-from . import ingest as _ingest  # reuse loaders and embedding helpers
 
 try:
     from tqdm.auto import tqdm  # type: ignore

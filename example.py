@@ -1,8 +1,10 @@
-import os
 import json
+import os
+
 import numpy as np
-from vxdf.writer import VXDFWriter
+
 from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 # --- Configuration ---
 FILE_PATH = "sample.vxdf"

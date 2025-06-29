@@ -1,14 +1,16 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import struct
-import hashlib
 import zlib
-import zstandard as zstd
+from typing import Any, Dict, Optional
+
 import msgpack
+import zstandard as zstd
+
 from . import errors
 
-from typing import Dict, Any, Optional
 
 class VXDFWriter:
     """Writes data to a VXDF file."""
@@ -95,7 +97,7 @@ class VXDFWriter:
         self.file.write(packed_chunk)
         self.chunk_count += 1
 
-    def __enter__(self) -> "VXDFWriter":
+    def __enter__(self) -> VXDFWriter:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:

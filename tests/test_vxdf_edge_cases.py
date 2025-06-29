@@ -6,14 +6,13 @@ ensure every custom error class is raised under the right conditions.
 from __future__ import annotations
 
 import os
-import struct
 from pathlib import Path
 
 import pytest
 
-from vxdf.writer import VXDFWriter
-from vxdf.reader import VXDFReader
 from vxdf import errors as vxerr
+from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 FOOTER_MARKER = b"---VXDF_END---\n"
 HEADER_MARKER = b"\n---HEADER_END---\n"

@@ -9,11 +9,10 @@ split(in_file, *, size_bytes=None, chunks_per_file=None, show_progress=True)
 """
 from __future__ import annotations
 
-from pathlib import Path
-from typing import List, Sequence, Optional
-import os
 import sys
 from contextlib import nullcontext
+from pathlib import Path
+from typing import Optional, Sequence
 
 try:
     from tqdm.auto import tqdm  # type: ignore

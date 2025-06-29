@@ -17,7 +17,7 @@ python -m vxdf pack input.jsonl output.vxdf --embedding-dim 768 --compression zl
 
 import argparse
 import os
-from typing import Optional, List
+from typing import List, Optional
 
 try:
     import argcomplete  # type: ignore
@@ -26,11 +26,9 @@ except ImportError:  # pragma: no cover
 import json
 import sys
 
-from pathlib import Path
-
-from .writer import VXDFWriter
+from .auth import get_openai_api_key, prompt_and_save_openai_key
 from .reader import VXDFReader
-from .auth import prompt_and_save_openai_key, get_openai_api_key
+from .writer import VXDFWriter
 
 # --------------------------
 # Banner shown on interactive terminals
@@ -87,7 +85,7 @@ def cmd_pack(args: argparse.Namespace) -> None:
 
     writer = VXDFWriter(out_path, embedding_dim=emb_dim, compression=compression)
     count = 0
-    istream = sys.stdin if args.input == "-" else open(args.input, "r", encoding="utf-8")
+    istream = sys.stdin if args.input == "-" else open(args.input, encoding="utf-8")
     with istream as f:
         for line in f:
             if not line.strip():
@@ -100,8 +98,10 @@ def cmd_pack(args: argparse.Namespace) -> None:
 
 
 from .ingest import convert as ingest_convert
+from .merge_split import merge as merge_vxdf
+from .merge_split import split as split_vxdf
 from .update import update as update_vxdf
-from .merge_split import merge as merge_vxdf, split as split_vxdf
+
 
 def cmd_update(args: argparse.Namespace) -> None:
     # Resolve / prompt for API key first
@@ -280,6 +280,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 from . import errors as vxdf_errors
+
 
 def _run_command(func, parsed_args):
     """Run command with unified error handling."""

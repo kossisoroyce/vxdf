@@ -11,7 +11,6 @@ or stricter detectors can refine the result.
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from typing import Iterable, List, Optional
 
 __all__ = [

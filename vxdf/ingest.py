@@ -6,18 +6,16 @@ install PDF or ML libraries.
 """
 from __future__ import annotations
 
+import itertools
+import json
+import shutil
+import sys
+import tempfile
+import threading
+import time
+import urllib.parse
 from pathlib import Path
 from typing import Iterator, List, Optional
-
-import json
-import sys
-from contextlib import nullcontext
-import threading
-import itertools
-import time
-import tempfile
-import urllib.parse
-import shutil
 
 from .errors import MissingDependencyError, NetworkError
 
@@ -136,7 +134,6 @@ def _embed_sentences(
 # ---------------------------------------------------------------------------
 
 def _load_pdf(path: Path) -> Iterator[tuple[str, str]]:
-    import hashlib
 
     try:
         import pdfplumber  # type: ignore
@@ -155,7 +152,7 @@ def _load_csv_tsv(path: Path, sep: str = ",") -> Iterator[tuple[str, str]]:
         import pandas as pd  # type: ignore
     except ImportError:  # pragma: no cover
         # fallback: naive reader
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             for i, line in enumerate(f):
                 yield f"row-{i}", line.strip()
         return
@@ -191,7 +188,7 @@ def _load_docx(path: Path) -> Iterator[tuple[str, str]]:
 
 
 def _load_json(path: Path) -> Iterator[tuple[str, str]]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         first_char = f.read(1)
         f.seek(0)
         if first_char == "[":  # JSON array
@@ -218,7 +215,7 @@ def _load_parquet(path: Path) -> Iterator[tuple[str, str]]:
 
 
 def _load_text(path: Path) -> Iterator[tuple[str, str]]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         for i, line in enumerate(f):
             if line.strip():
                 yield f"line-{i}", line.strip()

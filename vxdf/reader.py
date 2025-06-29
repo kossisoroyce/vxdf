@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import struct
-import hashlib
 import zlib
-import zstandard as zstd
-from typing import Dict, Any, Iterator, Optional
+from typing import Any, Dict, Iterator, Optional
+
 import msgpack
+import zstandard as zstd
+
 from . import errors
+
 
 class VXDFReader:
     """Reads and parses a VXDF file."""
@@ -133,7 +136,7 @@ class VXDFReader:
         """Closes the file handle."""
         self.file.close()
 
-    def __enter__(self) -> "VXDFReader":
+    def __enter__(self) -> VXDFReader:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:

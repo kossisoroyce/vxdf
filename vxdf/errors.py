@@ -5,6 +5,7 @@ This makes it straightforward for calling code to handle specific failure modes.
 """
 from __future__ import annotations
 
+
 class VXDFError(Exception):
     """Base class for all VXDF-related errors."""
 

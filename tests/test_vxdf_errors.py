@@ -7,16 +7,14 @@ These tests cover the most common failure modes:
 """
 from __future__ import annotations
 
-import os
 import struct
-import tempfile
 from pathlib import Path
 
 import pytest
 
-from vxdf.writer import VXDFWriter
-from vxdf.reader import VXDFReader
 from vxdf import errors as vxerr
+from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 
 def _make_sample_file(tmp_path: Path, *, compression: str = "none") -> Path:

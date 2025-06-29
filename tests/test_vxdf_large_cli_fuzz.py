@@ -7,17 +7,17 @@
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
-from vxdf.writer import VXDFWriter
 from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 # -----------------------
 # 1. Large sparse file (>4 GiB offset)
@@ -31,13 +31,12 @@ def test_sparse_file_large_offset(tmp_path: Path) -> None:
     writer = VXDFWriter(str(big_fp), embedding_dim=3, compression="none")
 
     # Seek to 4 GiB (2**32) to make the first chunk offset large.
-    writer.file.seek((1 << 32))
+    writer.file.seek(1 << 32)
     writer.add_chunk({"id": "big", "text": "hello", "vector": [0, 0, 0]})
     writer.close()
 
     # Reader should still locate and read the chunk correctly
     # Monkeypatch checksum to avoid reading 4 GiB of zeros
-    import types
     VXDFReader._verify_checksum = lambda self: None  # type: ignore[assignment]
     reader = VXDFReader(str(big_fp))
     data = reader.get_chunk("big")
@@ -73,6 +72,7 @@ def test_cli_info_list_get(tmp_path: Path) -> None:
 
 
 from hypothesis import HealthCheck
+
 
 @settings(max_examples=30, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(

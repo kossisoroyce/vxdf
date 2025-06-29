@@ -7,9 +7,9 @@ so users know what to configure.
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any, Dict, Optional
-import os
 
 from .errors import AuthenticationError, MissingDependencyError
 
@@ -29,7 +29,7 @@ def _load_config() -> Dict[str, Any]:
                 raise MissingDependencyError(
                     "Reading ~/.vxdf/config.toml requires the 'toml' package. Install via 'pip install toml'."
                 ) from exc
-            with open(cfg_path, "r", encoding="utf-8") as f:
+            with open(cfg_path, encoding="utf-8") as f:
                 return toml.load(f)
     return {}
 
@@ -125,8 +125,8 @@ def prompt_and_save_openai_key() -> Optional[str]:
     Returns the key if one was entered, otherwise ``None``. No prompt is shown
     if stdin is not a TTY (e.g., running in CI).
     """
-    import sys
     import getpass
+    import sys
 
     if not sys.stdin.isatty():
         return None

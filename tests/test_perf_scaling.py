@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from vxdf.writer import VXDFWriter
 from vxdf.reader import VXDFReader
+from vxdf.writer import VXDFWriter
 
 
 def _gen_chunks(n: int):
