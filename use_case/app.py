@@ -21,6 +21,9 @@ from dotenv import load_dotenv
 # Load environment variables from a .env file (if present)
 load_dotenv()
 
+# Workaround for Pillow/torchvision enum mismatch on some environments
+os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
+
 import numpy as np
 import streamlit as st
 from numpy.typing import NDArray
