@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vxdf package &mdash; VXDF 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quick-start Guide" href="../guides/quick_start.html" />
+    <link rel="prev" title="vxdf" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            VXDF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">vxdf</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">vxdf package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.auth">vxdf.auth module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.auth.ensure_aws_credentials"><code class="docutils literal notranslate"><span class="pre">ensure_aws_credentials()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.auth.ensure_gcp_credentials"><code class="docutils literal notranslate"><span class="pre">ensure_gcp_credentials()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.auth.get_openai_api_key"><code class="docutils literal notranslate"><span class="pre">get_openai_api_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.auth.prompt_and_save_openai_key"><code class="docutils literal notranslate"><span class="pre">prompt_and_save_openai_key()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.cli">vxdf.cli module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.build_parser"><code class="docutils literal notranslate"><span class="pre">build_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_convert"><code class="docutils literal notranslate"><span class="pre">cmd_convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_get"><code class="docutils literal notranslate"><span class="pre">cmd_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_info"><code class="docutils literal notranslate"><span class="pre">cmd_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_list"><code class="docutils literal notranslate"><span class="pre">cmd_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_merge"><code class="docutils literal notranslate"><span class="pre">cmd_merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_pack"><code class="docutils literal notranslate"><span class="pre">cmd_pack()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_split"><code class="docutils literal notranslate"><span class="pre">cmd_split()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.cmd_update"><code class="docutils literal notranslate"><span class="pre">cmd_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.errors">vxdf.errors module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.AuthenticationError"><code class="docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.ChecksumMismatchError"><code class="docutils literal notranslate"><span class="pre">ChecksumMismatchError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.ChunkNotFoundError"><code class="docutils literal notranslate"><span class="pre">ChunkNotFoundError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.CompressionError"><code class="docutils literal notranslate"><span class="pre">CompressionError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.DuplicateDocumentIDError"><code class="docutils literal notranslate"><span class="pre">DuplicateDocumentIDError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.EncryptionError"><code class="docutils literal notranslate"><span class="pre">EncryptionError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.InvalidChunkError"><code class="docutils literal notranslate"><span class="pre">InvalidChunkError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.InvalidFooterError"><code class="docutils literal notranslate"><span class="pre">InvalidFooterError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.InvalidHeaderError"><code class="docutils literal notranslate"><span class="pre">InvalidHeaderError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.MissingDependencyError"><code class="docutils literal notranslate"><span class="pre">MissingDependencyError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.NetworkError"><code class="docutils literal notranslate"><span class="pre">NetworkError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.errors.VXDFError"><code class="docutils literal notranslate"><span class="pre">VXDFError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.ingest">vxdf.ingest module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.ingest.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.ingest.detect_type"><code class="docutils literal notranslate"><span class="pre">detect_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.merge_split">vxdf.merge_split module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#public-functions">Public functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.merge_split.merge"><code class="docutils literal notranslate"><span class="pre">merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.merge_split.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.pii">vxdf.pii module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.pii.compile_patterns"><code class="docutils literal notranslate"><span class="pre">compile_patterns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.pii.contains_pii"><code class="docutils literal notranslate"><span class="pre">contains_pii()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.reader">vxdf.reader module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.reader.VXDFReader"><code class="docutils literal notranslate"><span class="pre">VXDFReader</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.update">vxdf.update module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.update.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf.writer">vxdf.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.writer.VXDFWriter"><code class="docutils literal notranslate"><span class="pre">VXDFWriter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-vxdf">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.VXDFReader"><code class="docutils literal notranslate"><span class="pre">VXDFReader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vxdf.VXDFWriter"><code class="docutils literal notranslate"><span class="pre">VXDFWriter</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quick_start.html">Quick-start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/langchain_integration.html">LangChain Integration Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">VXDF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">vxdf</a></li>
+      <li class="breadcrumb-item active">vxdf package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference/vxdf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vxdf-package">
+<h1>vxdf package<a class="headerlink" href="#vxdf-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-vxdf.auth">
+<span id="vxdf-auth-module"></span><h2>vxdf.auth module<a class="headerlink" href="#module-vxdf.auth" title="Link to this heading"></a></h2>
+<p>Centralised helpers for authentication credentials.</p>
+<p>This module avoids importing heavy cloud SDKs at import-time; it only touches
+<cite>os.environ</cite> and lightweight stdlib modules. Third-party cloud libraries still
+perform their own credential resolution, but we surface friendly errors early
+so users know what to configure.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.auth.ensure_aws_credentials">
+<span class="sig-prename descclassname"><span class="pre">vxdf.auth.</span></span><span class="sig-name descname"><span class="pre">ensure_aws_credentials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.auth.ensure_aws_credentials" title="Link to this definition"></a></dt>
+<dd><p>Raise <code class="docutils literal notranslate"><span class="pre">AuthenticationError</span></code> if AWS credentials cannot be resolved.</p>
+<p>We rely on <code class="docutils literal notranslate"><span class="pre">boto3</span></code>’s default credential chain (env vars, AWS CLI config,
+IAM roles). For a fast-fail and nicer error UX we test resolution early so
+the user gets an actionable message before a download starts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.auth.ensure_gcp_credentials">
+<span class="sig-prename descclassname"><span class="pre">vxdf.auth.</span></span><span class="sig-name descname"><span class="pre">ensure_gcp_credentials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.auth.ensure_gcp_credentials" title="Link to this definition"></a></dt>
+<dd><p>Raise <code class="docutils literal notranslate"><span class="pre">AuthenticationError</span></code> if Application Default Credentials are missing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.auth.get_openai_api_key">
+<span class="sig-prename descclassname"><span class="pre">vxdf.auth.</span></span><span class="sig-name descname"><span class="pre">get_openai_api_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cli_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#vxdf.auth.get_openai_api_key" title="Link to this definition"></a></dt>
+<dd><p>Return an OpenAI API key from CLI flag, env var, or user config.</p>
+<p>Lookup order (first win):
+1. <em>cli_key</em> argument passed by caller.
+2. Environment variable <code class="docutils literal notranslate"><span class="pre">OPENAI_API_KEY</span></code>.
+3. <code class="docutils literal notranslate"><span class="pre">openai.api_key</span></code> field in <code class="docutils literal notranslate"><span class="pre">~/.vxdf/config.toml</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#vxdf.errors.AuthenticationError" title="vxdf.errors.AuthenticationError"><strong>AuthenticationError</strong></a> – If no key is found by any method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.auth.prompt_and_save_openai_key">
+<span class="sig-prename descclassname"><span class="pre">vxdf.auth.</span></span><span class="sig-name descname"><span class="pre">prompt_and_save_openai_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.auth.prompt_and_save_openai_key" title="Link to this definition"></a></dt>
+<dd><p>Interactively prompt the user for an OpenAI API key and save it.</p>
+<p>Returns the key if one was entered, otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>. No prompt is shown
+if stdin is not a TTY (e.g., running in CI).</p>
+</dd></dl>
+
+</section>
+<section id="module-vxdf.cli">
+<span id="vxdf-cli-module"></span><h2>vxdf.cli module<a class="headerlink" href="#module-vxdf.cli" title="Link to this heading"></a></h2>
+<p>Command-line utilities for working with VXDF files.</p>
+<p>Usage examples:</p>
+<p># Show basic info about a VXDF file
+python -m vxdf info sample.vxdf</p>
+<p># List document IDs in a VXDF file
+python -m vxdf list sample.vxdf</p>
+<p># Extract a document by ID to stdout (pretty-printed JSON)
+python -m vxdf get sample.vxdf doc_123 &gt; doc.json</p>
+<p># Pack JSON lines into a VXDF file (expects each line to be a JSON object with id,text,vector)
+python -m vxdf pack input.jsonl output.vxdf –embedding-dim 768 –compression zlib</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.build_parser">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">build_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.13)"><span class="pre">ArgumentParser</span></a></span></span><a class="headerlink" href="#vxdf.cli.build_parser" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_convert">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_convert" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_get">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_get" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_info">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_list">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_merge">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_merge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_pack">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_pack" title="Link to this definition"></a></dt>
+<dd><p>Pack newline-delimited JSON into a VXDF file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_split">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_split" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.cmd_update">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">cmd_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.13)"><span class="pre">Namespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.cmd_update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.cli.main">
+<span class="sig-prename descclassname"><span class="pre">vxdf.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.cli.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-vxdf.errors">
+<span id="vxdf-errors-module"></span><h2>vxdf.errors module<a class="headerlink" href="#module-vxdf.errors" title="Link to this heading"></a></h2>
+<p>Centralised VXDF exception hierarchy.</p>
+<p>All public APIs raise these exceptions instead of bare <cite>ValueError</cite>, <cite>KeyError</cite>, etc.
+This makes it straightforward for calling code to handle specific failure modes.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.AuthenticationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">AuthenticationError</span></span><a class="headerlink" href="#vxdf.errors.AuthenticationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Authentication credentials are missing or invalid.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.ChecksumMismatchError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">ChecksumMismatchError</span></span><a class="headerlink" href="#vxdf.errors.ChecksumMismatchError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>File checksum does not match footer value (file may be corrupted).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.ChunkNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">ChunkNotFoundError</span></span><a class="headerlink" href="#vxdf.errors.ChunkNotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Requested document ID not present in the offset index.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.CompressionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">CompressionError</span></span><a class="headerlink" href="#vxdf.errors.CompressionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Error occurred during compression or decompression.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.DuplicateDocumentIDError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">DuplicateDocumentIDError</span></span><a class="headerlink" href="#vxdf.errors.DuplicateDocumentIDError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Attempted to add a chunk with a duplicate document ID.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.EncryptionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">EncryptionError</span></span><a class="headerlink" href="#vxdf.errors.EncryptionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Chunk is encrypted but key is missing or decryption failed.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.InvalidChunkError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">InvalidChunkError</span></span><a class="headerlink" href="#vxdf.errors.InvalidChunkError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Chunk data failed validation (e.g., wrong embedding dimension).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.InvalidFooterError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">InvalidFooterError</span></span><a class="headerlink" href="#vxdf.errors.InvalidFooterError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Footer or end marker is missing / malformed.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.InvalidHeaderError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">InvalidHeaderError</span></span><a class="headerlink" href="#vxdf.errors.InvalidHeaderError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Header is missing or malformed.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.MissingDependencyError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">MissingDependencyError</span></span><a class="headerlink" href="#vxdf.errors.MissingDependencyError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Optional library needed for this operation is not installed.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.NetworkError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">NetworkError</span></span><a class="headerlink" href="#vxdf.errors.NetworkError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vxdf.errors.VXDFError" title="vxdf.errors.VXDFError"><code class="xref py py-class docutils literal notranslate"><span class="pre">VXDFError</span></code></a></p>
+<p>Network request failed (e.g., download error, timeout).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vxdf.errors.VXDFError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.errors.</span></span><span class="sig-name descname"><span class="pre">VXDFError</span></span><a class="headerlink" href="#vxdf.errors.VXDFError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Base class for all VXDF-related errors.</p>
+</dd></dl>
+
+</section>
+<section id="module-vxdf.ingest">
+<span id="vxdf-ingest-module"></span><h2>vxdf.ingest module<a class="headerlink" href="#module-vxdf.ingest" title="Link to this heading"></a></h2>
+<p>High-level helpers for converting common data files into VXDF.</p>
+<p>This module is intentionally dependency-light: heavy optional deps are imported
+lazily so that users who only need core VXDF functionality are not forced to
+install PDF or ML libraries.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.ingest.convert">
+<span class="sig-prename descclassname"><span class="pre">vxdf.ingest.</span></span><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all-MiniLM-L6-v2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openai_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_pii</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pii_patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.ingest.convert" title="Link to this definition"></a></dt>
+<dd><p>Convert <em>input_path</em> to a VXDF file at <em>output_path</em>.</p>
+<p>Each row / paragraph becomes a chunk with id/text/vector.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.ingest.detect_type">
+<span class="sig-prename descclassname"><span class="pre">vxdf.ingest.</span></span><span class="sig-name descname"><span class="pre">detect_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#vxdf.ingest.detect_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-vxdf.merge_split">
+<span id="vxdf-merge-split-module"></span><h2>vxdf.merge_split module<a class="headerlink" href="#module-vxdf.merge_split" title="Link to this heading"></a></h2>
+<p>Utilities to merge multiple VXDF files and split a large VXDF.</p>
+<p>Phase-1 advanced CLI helpers.</p>
+<section id="public-functions">
+<h3>Public functions<a class="headerlink" href="#public-functions" title="Link to this heading"></a></h3>
+<p>merge(out_file, <a href="#id1"><span class="problematic" id="id2">*</span></a>inputs, dedupe=”skip”, show_progress=True)
+split(in_file, <a href="#id3"><span class="problematic" id="id4">*</span></a>, size_bytes=None, chunks_per_file=None, show_progress=True)</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.merge_split.merge">
+<span class="sig-prename descclassname"><span class="pre">vxdf.merge_split.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedupe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'skip'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.merge_split.merge" title="Link to this definition"></a></dt>
+<dd><p>Merge <em>input_paths</em> into <em>output_path</em>.</p>
+<p>If <em>dedupe</em> is <code class="docutils literal notranslate"><span class="pre">skip</span></code> (default) duplicate IDs after the first occurrence
+are skipped. <code class="docutils literal notranslate"><span class="pre">error</span></code> aborts on duplicates. <code class="docutils literal notranslate"><span class="pre">firstwins</span></code> keeps the first
+seen (same as skip, but explicit).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.merge_split.split">
+<span class="sig-prename descclassname"><span class="pre">vxdf.merge_split.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunks_per_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.merge_split.split" title="Link to this definition"></a></dt>
+<dd><p>Split <em>input_path</em> into numbered shards.</p>
+<p>Exactly one of <em>size_bytes</em> or <em>chunks_per_file</em> must be provided.
+Output files are written as <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;-partNN.vxdf</span></code> beside the input file.</p>
+</dd></dl>
+
+</section>
+<section id="module-vxdf.pii">
+<span id="vxdf-pii-module"></span><h2>vxdf.pii module<a class="headerlink" href="#module-vxdf.pii" title="Link to this heading"></a></h2>
+<p>Lightweight regex-based PII detector used during ingestion.</p>
+<p>The detector is deliberately simple and dependency-free so it can run on any
+machine with the Python stdlib.  It searches for well-formatted patterns such as
+email addresses, US Social-Security numbers, credit-card numbers, IPv4/IPv6
+addresses and US phone numbers.</p>
+<p>The goal is <em>good enough</em> recall for an initial tag-only pass; downstream tools
+or stricter detectors can refine the result.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.pii.compile_patterns">
+<span class="sig-prename descclassname"><span class="pre">vxdf.pii.</span></span><span class="sig-name descname"><span class="pre">compile_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/re.html#re.Pattern" title="(in Python v3.13)"><span class="pre">Pattern</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vxdf.pii.compile_patterns" title="Link to this definition"></a></dt>
+<dd><p>Compile a list of string patterns into regex Pattern objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.pii.contains_pii">
+<span class="sig-prename descclassname"><span class="pre">vxdf.pii.</span></span><span class="sig-name descname"><span class="pre">contains_pii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/re.html#re.Pattern" title="(in Python v3.13)"><span class="pre">Pattern</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#vxdf.pii.contains_pii" title="Link to this definition"></a></dt>
+<dd><p>Return <em>True</em> if <em>text</em> matches any of the PII regexes.</p>
+<p>This helper is intentionally fast; it stops at the first match.</p>
+</dd></dl>
+
+</section>
+<section id="module-vxdf.reader">
+<span id="vxdf-reader-module"></span><h2>vxdf.reader module<a class="headerlink" href="#module-vxdf.reader" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.reader.</span></span><span class="sig-name descname"><span class="pre">VXDFReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vxdf.reader.VXDFReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Reads and parses a VXDF file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.reader.VXDFReader.close" title="Link to this definition"></a></dt>
+<dd><p>Closes the file handle.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader.embedding_dim">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">embedding_dim</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#vxdf.reader.VXDFReader.embedding_dim" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader.get_chunk">
+<span class="sig-name descname"><span class="pre">get_chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vxdf.reader.VXDFReader.get_chunk" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a single chunk by its document ID.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader.iter_chunks">
+<span class="sig-name descname"><span class="pre">iter_chunks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.13)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vxdf.reader.VXDFReader.iter_chunks" title="Link to this definition"></a></dt>
+<dd><p>Yields all data chunks in the order they appear in the file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vxdf.reader.VXDFReader.vxdf_version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vxdf_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#vxdf.reader.VXDFReader.vxdf_version" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-vxdf.update">
+<span id="vxdf-update-module"></span><h2>vxdf.update module<a class="headerlink" href="#module-vxdf.update" title="Link to this heading"></a></h2>
+<p>Incremental update helpers: append new documents to an existing VXDF.</p>
+<p>This is phase-1 functionality covering the <em>incremental updates</em> scenario.</p>
+<dl class="simple">
+<dt>Usage (Python):</dt><dd><p>from vxdf.update import update
+update(“corpus.vxdf”, “new_docs”, recursive=True)</p>
+</dd>
+<dt>CLI:</dt><dd><p>python -m vxdf update corpus.vxdf new_docs/ -r</p>
+</dd>
+</dl>
+<p>By default duplicate document IDs are <em>skipped</em>; use <code class="docutils literal notranslate"><span class="pre">--dedupe</span> <span class="pre">overwrite</span></code> to
+replace existing chunks or <code class="docutils literal notranslate"><span class="pre">--dedupe</span> <span class="pre">error</span></code> to abort on duplicates.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="vxdf.update.update">
+<span class="sig-prename descclassname"><span class="pre">vxdf.update.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vxdf_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all-MiniLM-L6-v2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dedupe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'skip'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openai_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.update.update" title="Link to this definition"></a></dt>
+<dd><p>Append new documents from <em>input_path</em> into an existing VXDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vxdf_path</strong> – Path to an existing .vxdf file (will be modified in-place
+using an atomic temp-file swap).</p></li>
+<li><p><strong>input_path</strong> – File or directory containing new data (same formats as
+<code class="docutils literal notranslate"><span class="pre">vxdf</span> <span class="pre">ingest</span> <span class="pre">convert</span></code>).</p></li>
+<li><p><strong>model</strong> – Embedding model name (ignored if documents contain <code class="docutils literal notranslate"><span class="pre">vector</span></code>
+already – not currently supported).</p></li>
+<li><p><strong>dedupe</strong> – How to handle duplicate IDs – <code class="docutils literal notranslate"><span class="pre">skip</span></code> (default), <code class="docutils literal notranslate"><span class="pre">overwrite</span></code>
+(replace old chunk), or <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-vxdf.writer">
+<span id="vxdf-writer-module"></span><h2>vxdf.writer module<a class="headerlink" href="#module-vxdf.writer" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="vxdf.writer.VXDFWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.writer.</span></span><span class="sig-name descname"><span class="pre">VXDFWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vxdf.writer.VXDFWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Writes data to a VXDF file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.writer.VXDFWriter.add_chunk">
+<span class="sig-name descname"><span class="pre">add_chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.writer.VXDFWriter.add_chunk" title="Link to this definition"></a></dt>
+<dd><p>Adds a single data chunk to the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunk_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – A dictionary containing the data for one chunk (e.g., id, text, vector).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.writer.VXDFWriter.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.writer.VXDFWriter.close" title="Link to this definition"></a></dt>
+<dd><p>Finalizes the VXDF file by writing the offset index and footer.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-vxdf">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-vxdf" title="Link to this heading"></a></h2>
+<p>VXDF Python library.</p>
+<p>High-level public API re-exports for easy import:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">vxdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">VXDFWriter</span><span class="p">,</span> <span class="n">VXDFReader</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="vxdf.VXDFReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.</span></span><span class="sig-name descname"><span class="pre">VXDFReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vxdf.VXDFReader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Reads and parses a VXDF file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.VXDFReader.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.VXDFReader.close" title="Link to this definition"></a></dt>
+<dd><p>Closes the file handle.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vxdf.VXDFReader.embedding_dim">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">embedding_dim</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#vxdf.VXDFReader.embedding_dim" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.VXDFReader.get_chunk">
+<span class="sig-name descname"><span class="pre">get_chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vxdf.VXDFReader.get_chunk" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a single chunk by its document ID.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.VXDFReader.iter_chunks">
+<span class="sig-name descname"><span class="pre">iter_chunks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.13)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vxdf.VXDFReader.iter_chunks" title="Link to this definition"></a></dt>
+<dd><p>Yields all data chunks in the order they appear in the file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vxdf.VXDFReader.vxdf_version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vxdf_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#vxdf.VXDFReader.vxdf_version" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vxdf.VXDFWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vxdf.</span></span><span class="sig-name descname"><span class="pre">VXDFWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vxdf.VXDFWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Writes data to a VXDF file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.VXDFWriter.add_chunk">
+<span class="sig-name descname"><span class="pre">add_chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.VXDFWriter.add_chunk" title="Link to this definition"></a></dt>
+<dd><p>Adds a single data chunk to the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunk_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – A dictionary containing the data for one chunk (e.g., id, text, vector).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vxdf.VXDFWriter.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#vxdf.VXDFWriter.close" title="Link to this definition"></a></dt>
+<dd><p>Finalizes the VXDF file by writing the offset index and footer.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="vxdf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../guides/quick_start.html" class="btn btn-neutral float-right" title="Quick-start Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, VXDF Developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
