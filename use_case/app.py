@@ -14,7 +14,7 @@ import io
 import json
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Any
 
 from dotenv import load_dotenv
 
@@ -59,12 +59,21 @@ def _load_vxdf(path: Path) -> tuple[List[str], NDArray[np.float32]]:
 
 
 def _embed(sentences: List[str]) -> NDArray[np.float32]:
-    """Embed sentences using OpenAI or local SentenceTransformer."""
+    """Embed sentences using OpenAI (v0 or v1 SDK) or local SentenceTransformer."""
     api_key = get_openai_api_key()
     if api_key and openai is not None:
-        openai.api_key = api_key
-        resp = openai.Embedding.create(model="text-embedding-3-large", input=sentences)  # type: ignore
-        return np.asarray([d["embedding"] for d in resp["data"]], dtype=np.float32)
+        try:
+            # Try modern SDK (openai>=1.0.0)
+            from openai import OpenAI  # type: ignore
+
+            client: Any = OpenAI(api_key=api_key)
+            resp = client.embeddings.create(model="text-embedding-3-large", input=sentences)
+            return np.asarray([d.embedding for d in resp.data], dtype=np.float32)
+        except (ImportError, AttributeError):
+            # Fall back to legacy openai<1.0.0 interface
+            openai.api_key = api_key  # type: ignore
+            resp = openai.Embedding.create(model="text-embedding-3-large", input=sentences)  # type: ignore
+            return np.asarray([d["embedding"] for d in resp["data"]], dtype=np.float32)
     if SentenceTransformer is None:
         raise RuntimeError("sentence-transformers not installed. Install via `pip install sentence-transformers`. ")
     model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -152,16 +161,30 @@ if prompt:
     answer: str
     api_key = get_openai_api_key()
     if api_key and openai is not None:
-        openai.api_key = api_key
-        resp = openai.ChatCompletion.create(  # type: ignore
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a compliance assistant referencing EU regulations."},
-                {"role": "user", "content": f"Context:\n{context}\n\nQuestion:{prompt}"},
-            ],
-            temperature=0.2,
-        )
-        answer = resp["choices"][0]["message"]["content"].strip()
+        try:
+            from openai import OpenAI  # type: ignore
+
+            client: Any = OpenAI(api_key=api_key)
+            resp = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a compliance assistant referencing EU regulations."},
+                    {"role": "user", "content": f"Context:\n{context}\n\nQuestion:{prompt}"},
+                ],
+                temperature=0.2,
+            )
+            answer = resp.choices[0].message.content.strip()
+        except (ImportError, AttributeError):
+            openai.api_key = api_key  # type: ignore
+            resp = openai.ChatCompletion.create(  # type: ignore
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a compliance assistant referencing EU regulations."},
+                    {"role": "user", "content": f"Context:\n{context}\n\nQuestion:{prompt}"},
+                ],
+                temperature=0.2,
+            )
+            answer = resp["choices"][0]["message"]["content"].strip()
     else:
         # Fallback: simple extractive answer = top match text
         answer = "\n\n".join(context_chunks[:2])
