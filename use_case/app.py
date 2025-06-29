@@ -59,24 +59,28 @@ def _load_vxdf(path: Path) -> tuple[List[str], NDArray[np.float32]]:
 
 
 def _embed(sentences: List[str]) -> NDArray[np.float32]:
+    """Embed sentences matching the reference embedding dimension (EU_DIM)."""
+
     """Embed sentences using OpenAI (v0 or v1 SDK) or local SentenceTransformer."""
     api_key = get_openai_api_key()
-    if api_key and openai is not None:
+    # Prefer OpenAI embeddings when dims match EU_DIM and key available
+    if api_key and openai is not None and EU_DIM in {1536, 3072}:
         try:
-            # Try modern SDK (openai>=1.0.0)
             from openai import OpenAI  # type: ignore
-
             client: Any = OpenAI(api_key=api_key)
             resp = client.embeddings.create(model="text-embedding-3-large", input=sentences)
-            return np.asarray([d.embedding for d in resp.data], dtype=np.float32)
-        except (ImportError, AttributeError):
-            # Fall back to legacy openai<1.0.0 interface
-            openai.api_key = api_key  # type: ignore
-            resp = openai.Embedding.create(model="text-embedding-3-large", input=sentences)  # type: ignore
-            return np.asarray([d["embedding"] for d in resp["data"]], dtype=np.float32)
+            vecs = np.asarray([d.embedding for d in resp.data], dtype=np.float32)
+            if vecs.shape[1] == EU_DIM:
+                return vecs
+        except Exception:
+            # fallthrough to local model
+            pass
+    # Local sentence-transformer fallback; choose model by target dim
     if SentenceTransformer is None:
         raise RuntimeError("sentence-transformers not installed. Install via `pip install sentence-transformers`. ")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    st_model_map = {384: "all-MiniLM-L6-v2", 768: "all-mpnet-base-v2"}
+    model_name = st_model_map.get(EU_DIM, "all-MiniLM-L6-v2")
+    model = SentenceTransformer(model_name)
     return model.encode(sentences, normalize_embeddings=True)
 
 
@@ -91,6 +95,7 @@ if not EU_VXDF_PATH.exists():
     st.stop()
 
 EU_IDS, EU_VECS = _load_vxdf(EU_VXDF_PATH)
+EU_DIM = EU_VECS.shape[1]  # reference embedding dimension
 
 # Sidebar: upload company policy PDF or paste text -------------------------------------------------
 with st.sidebar:
