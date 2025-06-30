@@ -41,7 +41,9 @@ def _writable_cache_dir() -> Path:
     4.  Current working directory as a last resort.
     """
 
+    model_dir = Path(__file__).parent / "model"
     candidates = [
+        model_dir,
         Path(os.getenv("HF_HOME", "")),
         Path("/data"),
         Path("/tmp"),
