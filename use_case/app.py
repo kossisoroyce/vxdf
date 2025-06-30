@@ -24,6 +24,15 @@ load_dotenv()
 # Workaround for Pillow/torchvision enum mismatch on some environments
 os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
 
+# ---------------------------------------------------------------------------
+# Hugging Face Spaces fix: use a writable cache directory instead of /root/.cache
+# ---------------------------------------------------------------------------
+CACHE_DIR = Path(__file__).parent / ".cache"
+CACHE_DIR.mkdir(exist_ok=True)
+# Point Hugging Face libraries to this directory
+os.environ.setdefault("TRANSFORMERS_CACHE", str(CACHE_DIR))
+os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+
 import numpy as np
 import streamlit as st
 from numpy.typing import NDArray
@@ -137,7 +146,7 @@ def _embed(sentences: List[str]) -> NDArray[np.float32]:
         raise RuntimeError("sentence-transformers not installed. Install via `pip install sentence-transformers`. ")
     st_model_map = {384: "all-MiniLM-L6-v2", 768: "all-mpnet-base-v2"}
     model_name = st_model_map.get(EU_DIM, "all-MiniLM-L6-v2")
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_name, cache_folder=str(CACHE_DIR))
     return model.encode(sentences, normalize_embeddings=True)
 
 

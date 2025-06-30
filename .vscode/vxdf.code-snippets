@@ -1,0 +1,67 @@
+{
+	"VXDF: Write a new file": {
+		"prefix": "vxdf-write",
+		"body": [
+			"from vxdf import VXDFWriter",
+			"",
+			"# TODO: Prepare your documents and vectors",
+			"docs = [{\"text\": \"First document.\", \"metadata\": {\"id\": 1}}]",
+			"vectors = [[0.1, 0.2, 0.3]]",
+			"",
+			"with VXDFWriter(\"${1:output.vxdf}\", mode='w') as writer:",
+			"    for doc, vec in zip(docs, vectors):",
+			"        writer.add_chunk(",
+			"            text=doc[\"text\"],",
+			"            vector=vec,",
+			"            metadata=doc.get(\"metadata\")",
+			"        )",
+			"",
+			"print(f\"Wrote {len(docs)} chunks to ${1:output.vxdf}\")"
+		],
+		"description": "Boilerplate for creating and writing to a new VXDF file."
+	},
+	"VXDF: Read a file": {
+		"prefix": "vxdf-read",
+		"body": [
+			"from vxdf import VXDFReader",
+			"",
+			"reader = VXDFReader(\"${1:input.vxdf}\")",
+			"",
+			"print(f\"File version: {reader.version}\")",
+			"print(f\"Number of chunks: {len(reader)}\")",
+			"",
+			"# Iterate through all chunks",
+			"for i, chunk in enumerate(reader.iter_chunks()):",
+			"    print(f\"--- Chunk {i} ---\")",
+			"    print(chunk[\"text\"][:80] + '...')",
+			"    print(f\"Metadata: {chunk[\"metadata\"]}\")"
+		],
+		"description": "Boilerplate for reading and iterating through a VXDF file."
+	},
+	"VXDF: Load vectors to NumPy": {
+		"prefix": "vxdf-numpy",
+		"body": [
+			"from vxdf import VXDFReader",
+			"",
+			"reader = VXDFReader(\"${1:input.vxdf}\")",
+			"vectors = reader.to_numpy()",
+			"",
+			"print(f\"Loaded {vectors.shape[0]} vectors of dimension {vectors.shape[1]}\")"
+		],
+		"description": "Load all vectors from a VXDF file into a NumPy array."
+	},
+	"VXDF CLI: Convert Folder": {
+		"prefix": "vxdf-cli-folder",
+		"body": [
+			"vxdf convert ${1:path/to/folder/} --output ${2:corpus.vxdf}"
+		],
+		"description": "CLI command to convert a folder of files to a single VXDF file."
+	},
+	"VXDF CLI: Convert URL": {
+		"prefix": "vxdf-cli-url",
+		"body": [
+			"vxdf convert ${1:https://example.com/data.txt} --output ${2:web_content.vxdf}"
+		],
+		"description": "CLI command to ingest content from a URL into a VXDF file."
+	}
+}
