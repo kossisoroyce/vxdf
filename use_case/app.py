@@ -148,10 +148,20 @@ if st.session_state["auth_stage"] == "await_key":
                 os.environ["OPENAI_API_KEY"] = api_input
                 st.success("API key saved in session.")
                 st.session_state["auth_stage"] = "ready"
-                st.experimental_rerun()
+                if hasattr(st, "experimental_rerun"):
+                    st.experimental_rerun()
+                elif hasattr(st, "rerun"):
+                    st.rerun()
+                else:
+                    st.stop()
             elif use_local:
                 st.session_state["auth_stage"] = "ready"
-                st.experimental_rerun()
+                if hasattr(st, "experimental_rerun"):
+                    st.experimental_rerun()
+                elif hasattr(st, "rerun"):
+                    st.rerun()
+                else:
+                    st.stop()
             else:
                 st.warning("Please enter a key or choose the local model option.")
     st.stop()
