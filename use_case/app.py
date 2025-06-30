@@ -75,6 +75,29 @@ st.markdown(
             margin-top: -0.5rem;
             font-size: 0.95rem;
         }}
+            /* Chat message bubbles */
+        /* user */
+        div[data-testid="stChatMessageUser"] .stMarkdown p {
+            background: #007cf0;
+            color: white;
+            padding: 0.6rem 0.9rem;
+            border-radius: 18px 18px 4px 18px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        /* assistant */
+        div[data-testid="stChatMessageAssistant"] .stMarkdown p {
+            background: #f1f3f5;
+            color: #212529;
+            padding: 0.6rem 0.9rem;
+            border-radius: 18px 18px 18px 4px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        /* Reduce default margins */
+        div[data-testid^="stChatMessage"] .stMarkdown p {
+            margin-bottom: 0.25rem;
+        }
     </style>
     """,
     unsafe_allow_html=True,
