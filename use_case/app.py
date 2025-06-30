@@ -49,8 +49,39 @@ except ImportError:  # pragma: no cover
 # ---------------------------------------------------------------------------
 EU_VXDF_PATH = Path(__file__).with_suffix("").parent / "eu_policies.vxdf"
 
-st.set_page_config(page_title="VXDF Compliance Checker", layout="wide")
-st.title("📜🔍 EU Policy Compliance Checker")
+st.set_page_config(page_title="VXDF Compliance Checker", page_icon="🛡️", layout="wide")
+
+# ----------------- Global style -------------------------------------------------
+st.markdown(
+    """
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        html, body, [class*="st-"], .css-ffhzg2 {{
+            font-family: 'Poppins', sans-serif;
+        }}
+        .block-container {{
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }}
+        .main-title {{
+            font-weight: 600;
+            font-size: 2.4rem;
+            background: linear-gradient(90deg,#007cf0,#00dfd8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }}
+        .subtitle {{
+            color: #adb5bd;
+            margin-top: -0.5rem;
+            font-size: 0.95rem;
+        }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div class="main-title">🛡️  PolicyGuard Compliance Assistant</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Chat with EU regulations and your own company policies</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 @st.cache_resource(show_spinner="Loading EU policy database…")
@@ -99,6 +130,31 @@ if not EU_VXDF_PATH.exists():
 
 EU_IDS, EU_VECS = _load_vxdf(EU_VXDF_PATH)
 EU_DIM = EU_VECS.shape[1]  # reference embedding dimension
+
+# ----------------- API key onboarding ------------------------------------------
+if "auth_stage" not in st.session_state:
+    st.session_state["auth_stage"] = "await_key"
+
+if st.session_state["auth_stage"] == "await_key":
+    with st.sidebar:
+        st.header("🔑 API Key Setup")
+        st.write("Provide your OpenAI key for best-quality answers, or proceed with the built-in local model (no key required). Your key never leaves the browser session.")
+        with st.form("key_form"):
+            api_input = st.text_input("OpenAI API Key", type="password", placeholder="sk-…")
+            use_local = st.checkbox("Use built-in MiniLM model instead", value=not bool(api_input))
+            submitted = st.form_submit_button("Start Chatting ")
+        if submitted:
+            if api_input:
+                os.environ["OPENAI_API_KEY"] = api_input
+                st.success("API key saved in session.")
+                st.session_state["auth_stage"] = "ready"
+                st.experimental_rerun()
+            elif use_local:
+                st.session_state["auth_stage"] = "ready"
+                st.experimental_rerun()
+            else:
+                st.warning("Please enter a key or choose the local model option.")
+    st.stop()
 
 # Sidebar: upload company policy PDF or paste text -------------------------------------------------
 with st.sidebar:
