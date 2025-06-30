@@ -300,9 +300,42 @@ if prompt:
     context = "\n---\n".join(context_chunks)
 
     # Generate answer --------------------------------------------------------
-    answer: str
-    api_key = get_openai_api_key()
-    if api_key and openai is not None:
+    # ---- Show assistant bubble with spinner while generating -----------------
+    with st.chat_message("assistant"):
+        with st.spinner("Generating answer…"):
+            api_key = get_openai_api_key()
+            if api_key and openai is not None:
+                try:
+                    from openai import OpenAI  # type: ignore
+
+                    client: Any = OpenAI(api_key=api_key)
+                    resp = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "system", "content": "You are a compliance assistant referencing EU regulations."},
+                            {"role": "user", "content": f"Context:\n{context}\n\nQuestion:{prompt}"},
+                        ],
+                        temperature=0.2,
+                    )
+                    answer = resp.choices[0].message.content.strip()
+                except (ImportError, AttributeError):
+                    openai.api_key = api_key  # type: ignore
+                    resp = openai.ChatCompletion.create(  # type: ignore
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "system", "content": "You are a compliance assistant referencing EU regulations."},
+                            {"role": "user", "content": f"Context:\n{context}\n\nQuestion:{prompt}"},
+                        ],
+                        temperature=0.2,
+                    )
+                    answer = resp["choices"][0]["message"]["content"].strip()
+            else:
+                # Fallback: simple extractive answer = top match text
+                answer = "\n\n".join(context_chunks[:2])
+
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+            st.markdown(answer)
+            # spinner closes automatically
         try:
             from openai import OpenAI  # type: ignore
 
@@ -327,10 +360,4 @@ if prompt:
                 temperature=0.2,
             )
             answer = resp["choices"][0]["message"]["content"].strip()
-    else:
-        # Fallback: simple extractive answer = top match text
-        answer = "\n\n".join(context_chunks[:2])
 
-    st.session_state.messages.append({"role": "assistant", "content": answer})
-    with st.chat_message("assistant"):
-        st.markdown(answer)
