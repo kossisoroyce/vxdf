@@ -27,11 +27,45 @@ os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
 # ---------------------------------------------------------------------------
 # Hugging Face Spaces fix: use a writable cache directory instead of /root/.cache
 # ---------------------------------------------------------------------------
-CACHE_DIR = Path(__file__).parent / ".cache"
-CACHE_DIR.mkdir(exist_ok=True)
+# ---------------------------------------------------------------------------
+# Robust writable cache directory selection (HF Spaces allows /data or /tmp)
+# ---------------------------------------------------------------------------
+
+def _writable_cache_dir() -> Path:
+    """Return a directory we can write to for model caching.
+
+    Preference order:
+    1.  $HF_HOME if set and writable (HF Spaces persistent storage is `/data`).
+    2.  `/data` (HF Spaces persistent storage).
+    3.  `/tmp` (always writable but not persistent).
+    4.  Current working directory as a last resort.
+    """
+
+    candidates = [
+        Path(os.getenv("HF_HOME", "")),
+        Path("/data"),
+        Path("/tmp"),
+        Path.cwd(),
+    ]
+    for cand in candidates:
+        if not cand:  # empty from env
+            continue
+        try:
+            cand.mkdir(parents=True, exist_ok=True)
+            test = cand / ".write_test"
+            test.touch(exist_ok=True)
+            test.unlink(missing_ok=True)  # type: ignore[attr-defined]
+            return cand
+        except Exception:
+            continue
+    # Fallback to in-memory tmpfs (rare)
+    return Path("/tmp")
+
+
+CACHE_DIR = _writable_cache_dir()
 # Point Hugging Face libraries to this directory
-os.environ.setdefault("TRANSFORMERS_CACHE", str(CACHE_DIR))
-os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+os.environ["TRANSFORMERS_CACHE"] = str(CACHE_DIR)
+os.environ["HF_HOME"] = str(CACHE_DIR)
 
 import numpy as np
 import streamlit as st
