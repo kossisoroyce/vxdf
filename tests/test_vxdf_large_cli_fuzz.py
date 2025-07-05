@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -47,8 +48,19 @@ def test_sparse_file_large_offset(tmp_path: Path) -> None:
 # 2. CLI integration tests
 # -----------------------
 
-def _run_cli(args: List[str]) -> subprocess.CompletedProcess:
-    return subprocess.run([sys.executable, "-m", "vxdf", *args], capture_output=True, text=True)
+def _run_cli(args: List[str], cwd: Path) -> subprocess.CompletedProcess:
+    """Helper to run the CLI in a subprocess with the correct environment."""
+    # Prepend the project root to PYTHONPATH to ensure the local, patched
+    # version of the `vxdf` package is used, not a `pip install`ed one.
+    env = os.environ.copy()
+    project_root = str(Path(__file__).parent.parent)
+    python_path = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = f"{project_root}{os.pathsep}{python_path}" if python_path else project_root
+    
+    return subprocess.run(
+        [sys.executable, "-m", "vxdf", *args],
+        capture_output=True, text=True, cwd=cwd, env=env,
+    )
 
 
 def test_cli_info_list_get(tmp_path: Path) -> None:
@@ -57,13 +69,13 @@ def test_cli_info_list_get(tmp_path: Path) -> None:
     w.add_chunk({"id": "x", "text": "foo", "vector": [1, 2, 3]})
     w.close()
 
-    proc_info = _run_cli(["info", str(fp)])
+    proc_info = _run_cli(["info", str(fp)], cwd=tmp_path)
     assert proc_info.returncode == 0 and "Total documents" in proc_info.stdout
 
-    proc_list = _run_cli(["list", str(fp)])
+    proc_list = _run_cli(["list", str(fp)], cwd=tmp_path)
     assert proc_list.returncode == 0 and "x" in proc_list.stdout
 
-    proc_get = _run_cli(["get", str(fp), "x"])
+    proc_get = _run_cli(["get", str(fp), "x"], cwd=tmp_path)
     assert proc_get.returncode == 0 and json.loads(proc_get.stdout)["text"] == "foo"
 
 # -----------------------

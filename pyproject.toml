@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vxdf"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python implementation of the VXDF (Vector Exchange Data Format) for storing text, metadata and vector embeddings in a single portable file."
 readme = "README.md"
 authors = [
@@ -29,11 +29,10 @@ dependencies = [
     # OpenAI embeddings
     "openai>=1",
 ]
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["vxdf", "vector", "embeddings", "file-format", "rag"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
     "Typing :: Typed",

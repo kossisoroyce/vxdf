@@ -157,23 +157,72 @@ def _resolve_model(selected: str, openai_key: Optional[str] = None) -> str:
 
 
 def cmd_convert(args: argparse.Namespace) -> None:
+    """Convert INPUT to a VXDF file.
+
+    Supports piping stdin/stdout by passing "-" as the INPUT or OUTPUT value.
+    A temporary file is used internally so that the existing ingest.convert()
+    helper (which expects real file paths) continues to work unchanged.
+    """
+    import tempfile
+    from pathlib import Path
+
     # Resolve / prompt for API key first
     key = _resolve_openai_key(args.openai_key)
 
-    ingest_convert(
-        args.input,
-        args.output,
-        model=_resolve_model(args.model, key),
-        compression=args.compression,
-        openai_key=key,
-        recursive=args.recursive,
-        resume=args.resume,
-        workers=args.workers,
-        show_progress=args.progress,
-        detect_pii=args.detect_pii,
-        pii_patterns=args.pii_patterns,
-    )
-    print(f"Converted {args.input} -> {args.output}")
+    input_path = args.input
+    output_path = args.output
+    tmp_in_path = None
+    tmp_out_path = None
+
+    try:
+        if args.input == "-":
+            # For stdin, we must write to a temp file because ingest expects a path.
+            # We also need a file extension to detect the type. We'll assume .txt
+            # for stdin, as it's the most common use case for piping text.
+            with tempfile.NamedTemporaryFile(
+                "w", delete=False, suffix=".txt", encoding="utf-8"
+            ) as f:
+                f.write(sys.stdin.read())
+                tmp_in_path = f.name
+            input_path = tmp_in_path
+
+        if args.output == "-":
+            # For stdout, we write to a temp file and then stream it to stdout.
+            with tempfile.NamedTemporaryFile("wb", delete=False, suffix=".vxdf") as f:
+                tmp_out_path = f.name
+            output_path = tmp_out_path
+            # Ensure no banner or other noisy output corrupts the binary stream
+            os.environ["VXDF_NO_BANNER"] = "1"
+
+        ingest_convert(
+            input_path,
+            output_path,
+            compression=args.compression,
+            model=_resolve_model(args.model, key),
+            openai_key=key,
+            recursive=args.recursive,
+            # Disable progress bar when stdout is not a tty (i.e., being piped)
+            show_progress=args.progress and sys.stdout.isatty(),
+            resume=args.resume,
+            workers=args.workers,
+            summary=args.summary,
+            provenance=args.provenance,
+            detect_pii=args.detect_pii,
+            pii_patterns=args.pii_patterns,
+            # Pass a flag to indicate if the input is from stdin
+            is_stdin=tmp_in_path is not None,
+        )
+
+        if tmp_out_path:
+            with open(tmp_out_path, "rb") as f:
+                sys.stdout.buffer.write(f.read())
+
+    finally:
+        if tmp_in_path:
+            os.unlink(tmp_in_path)
+        if tmp_out_path:
+            os.unlink(tmp_out_path)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -226,6 +275,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_up.add_argument("-r", "--recursive", action="store_true", help="Recurse into directories when INPUT is folder")
     p_up.set_defaults(func=cmd_update, progress=True)
 
+    # append (alias for update)
+    p_append = subparsers.add_parser("append", help="Alias for 'update'")
+    p_append.add_argument("file", help="Existing .vxdf file to update")
+    p_append.add_argument("input", help="Input file/folder with new data")
+    p_append.add_argument("--model", default="auto", help="See 'update' --model")
+    p_append.add_argument("--dedupe", choices=["skip", "overwrite", "error"], default="skip", help="Duplicate ID handling")
+    p_append.add_argument("--no-progress", dest="progress", action="store_false", help="Disable progress bars")
+    p_append.add_argument("--openai-key", dest="openai_key", help="OpenAI API key (overrides env var / config file)")
+    p_append.add_argument("-r", "--recursive", action="store_true", help="Recurse into directories when INPUT is folder")
+    p_append.set_defaults(func=cmd_update, progress=True)
+
     # merge
     p_merge = subparsers.add_parser("merge", help="Merge multiple VXDF files into one")
     p_merge.add_argument("output", help="Output .vxdf file")
@@ -258,6 +318,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_conv.add_argument("--no-progress", dest="progress", action="store_false", help="Disable progress bars")
     p_conv.add_argument("--resume", action="store_true", help="Resume an interrupted conversion job")
     p_conv.add_argument("--workers", type=int, default=1, help="Number of parallel embedding workers")
+    p_conv.add_argument("--no-summary", dest="summary", action="store_false", help="Disable automatic text summarization")
+    p_conv.add_argument("--provenance", help="Value to store in the provenance field for all chunks (e.g. source label)")
     p_conv.add_argument(
         "--openai-key",
         dest="openai_key",

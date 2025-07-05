@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -32,6 +33,33 @@ __all__ = [
     "detect_type",
 ]
 
+def _writable_cache_dir() -> Path:
+    """Return a directory guaranteed to be writable for model caching.
+
+    Preferences: `model/` adjacent to this file, `$HF_HOME`, `/data`, `/tmp`, cwd.
+    """
+    base = Path(__file__).parent / "model"
+    candidates = [
+        base,
+        Path(os.getenv("HF_HOME", "")),
+        Path("/data"),
+        Path("/tmp"),
+        Path.cwd(),
+    ]
+    for cand in candidates:
+        try:
+            if not cand:
+                continue
+            cand.mkdir(parents=True, exist_ok=True)
+            test = cand / ".write_test"
+            test.touch(exist_ok=True)
+            test.unlink(missing_ok=True)  # type: ignore[attr-defined]
+            return cand
+        except Exception:
+            continue
+    return Path("/tmp")
+
+
 SUPPORTED_TYPES = {
     "pdf",
     "csv",
@@ -45,6 +73,52 @@ SUPPORTED_TYPES = {
     "txt",
     "md",
 }
+
+
+# ---------------------------------------------------------------------------
+# Summarization helper
+# ---------------------------------------------------------------------------
+
+def _summarize_text(text: str, *, openai_key: Optional[str] = None) -> str:  # noqa: D401
+    """Return a short summary for *text*.
+
+    If an OpenAI key is provided, we use a lightweight chat completion to
+    generate a concise summary. Otherwise, we fall back to the first sentence
+    (or first 120 characters) of the text.
+    """
+    text = text.strip()
+    if not text:
+        return ""
+
+    if openai_key:
+        try:
+            from openai import OpenAI  # type: ignore
+
+            client = OpenAI(api_key=openai_key)
+            prompt = (
+                "Summarize the following passage in ONE concise sentence (max 25 words). "
+                "Do not add commentary, quotation marks, or opinions.\n\n" + text[:1500]
+            )
+            resp = client.chat.completions.create(
+                model="gpt-3.5-turbo-0125",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.2,
+                max_tokens=40,
+            )
+            return resp.choices[0].message.content.strip()
+        except Exception as e:
+            # Any failure (missing package, quota, etc.) – fall back to heuristic.
+            print(
+                f"⚠️  WARNING: Embedding failed due to an error ({e}). Falling back to zero vectors. Please ensure all dependencies are installed ('pip install vxdf[ingest]') and that you have a stable network connection.",
+                file=sys.stderr,
+            )
+            if "Bad git executable" in str(e):  # pragma: no cover
+                pass
+    # Fallback: naive first-sentence/substring summary
+    if "." in text:
+        first_sent = text.split(".", 1)[0]
+        return first_sent.strip()
+    return text[:120].strip()
 
 
 # ---------------------------------------------------------------------------
@@ -77,16 +151,16 @@ def _embed_sentences(
 
         # If an OpenAI key is available *and* the requested model is an OpenAI model, use the OpenAI Embeddings endpoint.
         if openai_key and (model_name.startswith("text-embedding-") or model_name.startswith("openai:")):
-            import openai  # type: ignore
+            from openai import OpenAI # type: ignore
 
-            openai.api_key = openai_key
+            client = OpenAI(api_key=openai_key)
             # split into manageable batches (<=100 inputs per request)
             batch_size = 100
             batches = [sentences[i : i + batch_size] for i in range(0, len(sentences), batch_size)]
 
             def _embed_batch(batch: List[str]):
-                resp = openai.Embedding.create(model=model_name, input=batch)
-                return [d["embedding"] for d in resp["data"]]
+                resp = client.embeddings.create(model=model_name, input=batch)
+                return [d.embedding for d in resp.data]
 
             if workers > 1 and len(batches) > 1:
                 embeddings: List[List[float]] = []
@@ -112,7 +186,7 @@ def _embed_sentences(
             _model_for_st = "all-MiniLM-L6-v2"
 
         # Sentence-Transformers supports both HF hub names and local paths.
-        model = SentenceTransformer(_model_for_st)
+        model = SentenceTransformer(_model_for_st, cache_folder=str(_writable_cache_dir()))
 
         # Encode sentences in batches and convert results to regular Python lists.
         embeddings_st = model.encode(
@@ -318,10 +392,16 @@ def convert(
     workers: int = 1,
     detect_pii: bool = True,
     pii_patterns: Optional[List[str]] = None,
+    summary: bool = True,
+    provenance: Optional[str] = None,
+    is_stdin: bool = False,
 ) -> None:
     """Convert *input_path* to a VXDF file at *output_path*.
 
-    Each row / paragraph becomes a chunk with id/text/vector.
+    Each row / paragraph becomes a chunk with id/text/vector. When *summary* is
+    true, an automatic short summary is generated for each chunk. If
+    *provenance* is provided, that value is stored in the provenance field of
+    every chunk.
     """
 
     # Compile custom PII patterns once
@@ -380,6 +460,7 @@ def convert(
     BATCH_SIZE = 512  # embed/write in batches for memory safety
     ids: List[str] = []
     texts: List[str] = []
+    parents: List[str] = []
     writer: Optional[VXDFWriter] = None
     copy_done = False
 
@@ -409,13 +490,18 @@ def convert(
                     for chk in _old.iter_chunks():
                         writer.add_chunk(chk)
                 copy_done = True
-        for cid, text, vec in zip(ids, texts, embeds):
-            chunk = {"id": cid, "text": text, "vector": vec}
+        for cid, text, parent_id, vec in zip(ids, texts, parents, embeds):
+            chunk = {"id": cid, "text": text, "vector": vec, "parent": parent_id}
+            if summary:
+                chunk["summary"] = _summarize_text(text, openai_key=openai_key)
+            if provenance is not None:
+                chunk["provenance"] = provenance
             if detect_pii and contains_pii(text, patterns=compiled_patterns):
                 chunk["sensitive"] = True
             writer.add_chunk(chunk)
         ids.clear()
         texts.clear()
+        parents.clear()
         return
 
     # ... (rest of the code remains the same)
@@ -470,12 +556,16 @@ def convert(
             if ftype not in _LOADERS:
                 return  # skip unsupported
             loader = _LOADERS[ftype]
-            prefix = fp.stem
+            prefix = "stdin" if is_stdin else fp.stem
             for cid, text in loader(fp):
+                if not text or not text.strip():
+                    continue
                 if f"{prefix}-{cid}" in existing_ids:
                     continue  # skip already ingested
-                ids.append(f"{prefix}-{cid}")
+                full_id = f"{prefix}-{cid}"
+                ids.append(full_id)
                 texts.append(text)
+                parents.append(prefix)
                 if len(ids) >= BATCH_SIZE:
                     _flush_batch()
         elif fp.is_dir():
@@ -502,6 +592,7 @@ def convert(
         )
         for fp in files:
             _process_file(fp)
+        _flush_batch()
     else:
         _process_file(in_path)
     # Flush any remaining items

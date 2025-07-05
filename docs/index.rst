@@ -23,18 +23,25 @@ Installation
 Quick-start
 -----------
 
-Convert a PDF to VXDF via CLI:
-
-.. code-block:: bash
-
-   python -m vxdf convert my.pdf my.vxdf
-
-Or from Python:
+From Python:
 
 .. code-block:: python
 
-   from vxdf.ingest import convert
-   convert("my.pdf", "my.vxdf")
+    from vxdf import VXDFWriter, VXDFReader
+
+    # Create a small file
+    data = [
+        {"id": "1", "text": "hello", "vector": [0.1, 0.2]},
+        {"id": "2", "text": "world", "vector": [0.3, 0.4]},
+    ]
+    with VXDFWriter("demo.vxdf", embedding_dim=2) as w:
+        for chunk in data:
+            w.add_chunk(chunk)
+
+    # Read it back
+    reader = VXDFReader("demo.vxdf")
+    print(reader.get_chunk("2"))
+
 
 .. note::
    If this is your first time using an OpenAI model, the CLI will prompt you
@@ -56,6 +63,7 @@ Guides & Examples
    :maxdepth: 1
 
    guides/quick_start
+   guides/cli_usage
    guides/langchain_integration
 
 Indices and tables

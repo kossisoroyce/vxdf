@@ -34,13 +34,16 @@ vxdf pack data.jsonl data.vxdf --compression zstd   # create
 vxdf info data.vxdf                                  # header & stats
 vxdf list data.vxdf | head                           # ids
 vxdf get  data.vxdf some-id > doc.json               # extract
+
+# Pipe stdin to stdout (auto-detects model, disables banner/progress)
+cat report.txt | vxdf convert - - > report.vxdf
 ```
 
 ## Colab / Notebook
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kossisoroyce/vxdf/blob/main/notebooks/QuickStart.ipynb)
 
 ## LangChain integration (preview)
-
 
 ```python
 from langchain_community.vectorstores import VXDF
@@ -66,9 +69,11 @@ api_key = "sk-..."
 ```
 
 ### AWS (S3 URLs)
+
 Uses the standard AWS credential chain provided by *boto3* – environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`), the AWS CLI config, or an attached IAM role. Run `aws configure` if unsure.
 
 ### GCP (gs:// URLs)
+
 Relies on Application Default Credentials. Run `gcloud auth application-default login` or set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable pointing at a JSON key file.
 
 If credentials are missing VXDF exits early with a clear message and a hint on how to configure them.

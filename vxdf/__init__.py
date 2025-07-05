@@ -5,6 +5,8 @@ High-level public API re-exports for easy import::
     from vxdf import VXDFWriter, VXDFReader
 """
 
+import os
+
 from .reader import VXDFReader
 from .writer import VXDFWriter
 
@@ -12,3 +14,5 @@ __all__: list[str] = [
     "VXDFWriter",
     "VXDFReader",
 ]
+
+

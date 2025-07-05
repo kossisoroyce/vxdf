@@ -7,6 +7,8 @@ import zlib
 from typing import Any, Dict, Optional
 
 import msgpack
+import numpy as np
+from .pq import build_pq_index
 import zstandard as zstd
 
 from . import errors
@@ -16,7 +18,7 @@ class VXDFWriter:
     """Writes data to a VXDF file."""
 
 
-    def __init__(self, file_path: str, embedding_dim: int, *, compression: str = "none", fields: Optional[Dict[str, str]] = None) -> None:
+    def __init__(self, file_path: str, embedding_dim: int, *, compression: str = "none", fields: Optional[Dict[str, str]] = None, pq_m: int = 16) -> None:
         """
         Initializes the VXDF writer.
 
@@ -31,12 +33,18 @@ class VXDFWriter:
                 "id": "str",
                 "text": "str",
                 "meta": "dict",
-                "vector": f"float32[{embedding_dim}]" # Using a more descriptive type
+                "summary": "str",
+                "parent": "str",
+                "provenance": "dict",
+                "vector": f"float32[{embedding_dim}]"  # Using a more descriptive type
             }
 
         self.file_path = file_path
         self.compression = compression.lower()
         self.embedding_dim = embedding_dim
+        # PQ configuration (mandatory from v0.2)
+        self.pq_m = pq_m
+        self._vec_buffer: list[list[float]] = []
         try:
             self.zstd_c = zstd.ZstdCompressor() if self.compression == "zstd" else None
         except Exception as exc:  # pragma: no cover
@@ -73,6 +81,8 @@ class VXDFWriter:
             raise errors.InvalidChunkError(
                 f"Vector length {len(chunk_data['vector'])} does not match embedding_dim={self.embedding_dim}."
             )
+        # Buffer vector for PQ training
+        self._vec_buffer.append(chunk_data['vector'])
         if chunk_data['id'] in self.offset_index:
             raise errors.DuplicateDocumentIDError(f"Document ID '{chunk_data['id']}' already exists in file.")
 
@@ -113,29 +123,45 @@ class VXDFWriter:
         self.file.write(index_bytes)
         self.file.write(b'\n')
 
+        # --- Write PQ ANN section (mandatory) --- #
+        pq_offset = self.file.tell()
+        vecs = np.asarray(self._vec_buffer, dtype=np.float32)
+        if vecs.size == 0:
+            ann_meta = {"type": "none"}
+        else:
+            pq, codes = build_pq_index(vecs, m=self.pq_m)
+            pq.dump(self.file)
+            self.file.write(codes.tobytes(order="C"))
+            ann_meta = {
+                "type": "pq",
+                "m": self.pq_m,
+                "offset": pq_offset,
+                "codes_shape": [int(codes.shape[0]), int(codes.shape[1])],
+            }
+
+        # Close the file to ensure all data is written to disk before checksum.
+        self.file.close()
+
         # --- Calculate Checksum --- #
-        # Flush any buffered data to ensure checksum is calculated on up-to-date bytes.
-        self.file.flush()
-        self.file.seek(0)
         file_hash = hashlib.sha256()
-        # Hash everything up to the index offset
-        file_hash.update(self.file.read(index_offset))
+        with open(self.file_path, "rb") as f:
+            # Hash everything up to the index offset
+            file_hash.update(f.read(index_offset))
         checksum = file_hash.hexdigest()
 
-        # Ensure we are positioned at the end of the file again (after the index and newline)
-        self.file.seek(0, 2)
+        # --- Write Footer (re-opening in append mode) --- #
+        with open(self.file_path, "ab") as f:
+            footer = {
+                "index_offset": index_offset,
+                "checksum": checksum,
+                "ann": ann_meta,
+            }
+            footer_bytes = json.dumps(footer, indent=2).encode('utf-8')
+            f.write(footer_bytes)
+            # Write footer length as a 4-byte unsigned int, then the end marker.
+            f.write(struct.pack('>I', len(footer_bytes)))
+            f.write(b'---VXDF_END---')
 
-        # --- Write Footer --- #
-        footer = {
-            "index_offset": index_offset,
-            "checksum": checksum
-        }
-        footer_bytes = json.dumps(footer, indent=2).encode('utf-8')
-        self.file.write(footer_bytes)
-        self.file.write(b'\n---VXDF_END---\n')
-
-        # --- Clean up ---
-        self.file.close()
         print(f"VXDF file '{self.file_path}' created successfully with {self.chunk_count} chunks.")
 
 
